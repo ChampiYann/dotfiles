@@ -157,3 +157,6 @@ alias c='clear'
 # Set git config
 alias gpers='git config user.email \"yann.rosema@hotmail.com\"; git config user.name \"Yann Rosema\"'
 alias gcgk='git config user.email \"yann.rosema@cegeka.com\"; git config user.name \"Yann Rosema\"'
+
+# Git alias for the config/dotfile repo
+alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'

@@ -1,0 +1,12 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!.zshrc
+!.zshenv
+!.p10k.zsh
+!apt-requirements.sh
+!wsl-network-setup.sh
+!wsl-set-default-user.sh
+!.setup-scripts/

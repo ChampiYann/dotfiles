@@ -128,6 +128,7 @@ zinit snippet OMZP::colorize
 zinit snippet OMZP::pipenv
 zinit snippet OMZP::history
 zinit snippet OMZP::command-not-found
+zinit snippet OMZP::ssh-agent
 
 # Load auto suggestions (based on history)
 zinit light zsh-users/zsh-autosuggestions

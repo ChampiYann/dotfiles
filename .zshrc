@@ -132,6 +132,7 @@ zinit snippet OMZP::ssh-agent
 
 # Load auto suggestions (based on history)
 zinit light zsh-users/zsh-autosuggestions
+bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
 
 # Load syntax highlighting
 zinit light zdharma-continuum/fast-syntax-highlighting

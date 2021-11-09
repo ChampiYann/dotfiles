@@ -122,6 +122,14 @@ else
   echo "Skipping fzf installation."
 fi
 
+# jq for querying json output
+zinit ice as"program" from"gh-r" mv"jq-* -> jq"
+zinit load stedolan/jq
+
+# fzf jq integration. Truly amazing! (use it with kubectl and azure)
+zinit load reegnz/jq-zsh-plugin
+# command: alt + j
+
 # Load Oh-my-zsh plugins
 zinit snippet OMZP::git
 zinit snippet OMZP::colorize
@@ -143,6 +151,8 @@ compinit
 
 # replay compdef for catched completions
 zinit cdreplay -q
+
+source <(kubectl completion zsh)
 
 # Add ls colors
 alias ls='ls --color=auto'

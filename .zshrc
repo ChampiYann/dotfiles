@@ -127,8 +127,13 @@ zinit ice as"program" from"gh-r" mv"jq-* -> jq"
 zinit load stedolan/jq
 
 # fzf jq integration. Truly amazing! (use it with kubectl and azure)
+JQ_ZSH_PLUGIN_EXPAND_ALIASES=1
+zinit ice ver"feature/zsh_alias_support"
 zinit load reegnz/jq-zsh-plugin
 # command: alt + j
+
+# Ctrl+W to add 'watch' to the command or to the last command if buffer is empty
+zinit load enrico9034/zsh-watch-plugin
 
 # Load Oh-my-zsh plugins
 zinit snippet OMZP::git
@@ -167,8 +172,8 @@ alias la='ls -lAh'
 alias c='clear'
 
 # Set git config
-alias gpers='git config user.email \"yann.rosema@hotmail.com\"; git config user.name \"Yann Rosema\"'
-alias gcgk='git config user.email \"yann.rosema@cegeka.com\"; git config user.name \"Yann Rosema\"'
+alias gpers='git config user.email \"yann.rosema@hotmail.com\"; git config user.name \"Yann\ Rosema\"'
+alias gcgk='git config user.email \"yann.rosema@cegeka.com\"; git config user.name \"Yann\ Rosema\"'
 
 # Git alias for the config/dotfile repo
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'

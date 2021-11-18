@@ -3,6 +3,9 @@
 ## How to clone
 On a new machine, clone the repo as a bare repo.
 ```sh
+git clone --bare git@github.com:ChampiYann/dotfiles.git $HOME/.cfg
+```
+```sh
 git clone --bare https://github.com/ChampiYann/dotfiles $HOME/.cfg
 ```
 

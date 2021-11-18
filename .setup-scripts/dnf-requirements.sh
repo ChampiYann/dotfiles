@@ -6,4 +6,6 @@ dnf update && dnf upgrade
 dnf install -y passwd cracklib-dicts
 
 # zsh
-dnf install -y zsh file
+dnf install -y zsh
+dnf install -y file # needed for zinit extract
+dnf install -y findutils # needed for fzf

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+# Update and upgrade
 apt update
 apt upgrade
 

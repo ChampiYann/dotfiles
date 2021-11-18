@@ -50,10 +50,10 @@ autoload -Uz _zinit
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
-    zdharma-continuum/z-a-rust \
+    zdharma-continuum/zinit-annex-rust \
     zdharma-continuum/z-a-as-monitor \
-    zdharma-continuum/z-a-patch-dl \
-    zdharma-continuum/z-a-bin-gem-node
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-bin-gem-node
 
 # Load powerlevel10k
 zinit ice depth=1
@@ -123,7 +123,7 @@ else
 fi
 
 # jq for querying json output
-zinit ice as"program" from"gh-r" mv"jq-* -> jq"
+zinit ice as"program" from"gh-r" bpick"*linux64*" mv"jq-* -> jq"
 zinit load stedolan/jq
 
 # fzf jq integration. Truly amazing! (use it with kubectl and azure)

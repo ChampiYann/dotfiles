@@ -6,4 +6,4 @@ dnf update && dnf upgrade
 dnf install -y passwd cracklib-dicts
 
 # zsh
-dnf install -y zsh
+dnf install -y zsh file

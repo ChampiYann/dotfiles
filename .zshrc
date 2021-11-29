@@ -115,6 +115,10 @@ zinit snippet https://dl.k8s.io/release/v1.22.2/bin/linux/amd64/kubectl
 zinit ice if'[[ $(command -v kubectl) ]]'
 zinit snippet OMZP::kubectl
 
+## Helm
+zinit ice if'[[ ! $(command -v helm) ]]' as'program' pick'linux-amd64/helm' extract
+zinit snippet https://get.helm.sh/helm-v3.7.1-linux-amd64.tar.gz
+
 ## Go
 zinit ice as'program' pick'go/bin/go' if'[[ ! $(command -v go) ]]' extract
 zinit snippet https://golang.org/dl/go1.17.2.linux-amd64.tar.gz
@@ -165,6 +169,8 @@ compinit
 zinit cdreplay -q
 
 source <(kubectl completion zsh)
+
+source <(helm completion zsh)
 
 # Add ls colors
 alias ls='ls --color=auto'

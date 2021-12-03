@@ -9,8 +9,8 @@ dnf install -y passwd cracklib-dicts
 dnf install -y zsh
 dnf install -y file # needed for zinit extract
 dnf install -y findutils # needed for fzf
+dnf install -y wget # needed for code
 
 ## TODO
-# Missing wget (needed for code)
 # Missing chsh
 # 

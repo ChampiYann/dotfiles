@@ -138,8 +138,8 @@ zinit ice as"program" from"gh-r" bpick"*linux64*" mv"jq-* -> jq"
 zinit load stedolan/jq
 
 # fzf jq integration. Truly amazing! (use it with kubectl and azure)
-JQ_ZSH_PLUGIN_EXPAND_ALIASES=1
-zinit ice ver"feature/zsh_alias_support"
+#JQ_ZSH_PLUGIN_EXPAND_ALIASES=1
+#zinit ice ver"feature/zsh_alias_support"
 zinit load reegnz/jq-zsh-plugin
 # command: alt + j
 

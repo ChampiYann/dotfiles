@@ -12,6 +12,5 @@ dnf install -y findutils # needed for fzf
 
 ## TODO
 # Missing wget (needed for code)
-# Missing vim
 # Missing chsh
 # 

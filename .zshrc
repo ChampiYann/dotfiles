@@ -152,6 +152,9 @@ zinit load adoptium/temurin11-binaries
 zinit ice as'program' pick'apache-maven-3.6.3/bin/mvn' if'[[ ! $(command -v mvn) ]]' extract wait'[[ -n ${ZLAST_COMMANDS[(r)mvn*]} ]]'
 zinit snippet https://dlcdn.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
 
+# GPG
+export GPG_TTY=$(tty)
+
 # Load Oh-my-zsh plugins
 zinit snippet OMZP::git
 zinit snippet OMZP::colorize

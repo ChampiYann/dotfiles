@@ -144,6 +144,14 @@ zinit load reegnz/jq-zsh-plugin
 # Ctrl+W to add 'watch' to the command or to the last command if buffer is empty
 zinit load enrico9034/zsh-watch-plugin
 
+# java 11
+zinit ice as"program" if'[[ ! $(command -v java) ]]' from"gh-r" bpick"*jdk_x64_linux_hotspot*" pick'jdk-11.0.13+8/bin/java' extract id-as'jdk-11' atload'export JAVA_HOME=$HOME/.zinit/plugins/jdk-11/jdk-11.0.13+8'
+zinit load adoptium/temurin11-binaries
+
+# Maven
+zinit ice as'program' pick'apache-maven-3.6.3/bin/mvn' if'[[ ! $(command -v mvn) ]]' extract wait'[[ -n ${ZLAST_COMMANDS[(r)mvn*]} ]]'
+zinit snippet https://dlcdn.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+
 # Load Oh-my-zsh plugins
 zinit snippet OMZP::git
 zinit snippet OMZP::colorize

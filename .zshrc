@@ -120,8 +120,8 @@ zinit ice if'[[ ! $(command -v helm) ]]' as'program' pick'linux-amd64/helm' extr
 zinit snippet https://get.helm.sh/helm-v3.7.1-linux-amd64.tar.gz
 
 ## Go
-zinit ice as'program' pick'go/bin/go' if'[[ ! $(command -v go) ]]' extract
-zinit snippet https://golang.org/dl/go1.17.2.linux-amd64.tar.gz
+zinit ice as'program' pick'go/bin/go' if'[[ ! $(command -v go) ]]' id-as'go' extract
+zinit snippet https://golang.org/dl/go1.17.7.linux-amd64.tar.gz
 
 # Load fzf
 if [[ $(command -v go) ]]; then # Needs go to succeed
@@ -145,7 +145,7 @@ zinit load reegnz/jq-zsh-plugin
 zinit load enrico9034/zsh-watch-plugin
 
 # java 11
-zinit ice as"program" if'[[ ! $(command -v java) ]]' from"gh-r" bpick"*jdk_x64_linux_hotspot*" pick'jdk-11.0.13+8/bin/java' extract id-as'jdk-11' atload'export JAVA_HOME=$HOME/.zinit/plugins/jdk-11/jdk-11.0.13+8'
+zinit ice as"program" if'[[ ! $(command -v java) ]]' from"gh-r" bpick"*jdk_x64_linux_hotspot*" pick'jdk-11*/bin/java' extract id-as'jdk-11' atload'export JAVA_HOME=$(which java | cut -f -7 -d /)'
 zinit load adoptium/temurin11-binaries
 
 # Maven

@@ -145,7 +145,8 @@ zinit load reegnz/jq-zsh-plugin
 zinit load enrico9034/zsh-watch-plugin
 
 # java 11
-zinit ice as"program" if'[[ ! $(command -v java) ]]' from"gh-r" bpick"*jdk_x64_linux_hotspot*" pick'jdk-11*/bin/java' extract id-as'jdk-11' atload'export JAVA_HOME=$(which java | cut -f -7 -d /)'
+zinit ice as"program" if'[[ ! $(command -v java) ]]' from"gh-r" bpick"*jdk_x64_linux_hotspot*" \
+pick'jdk-11*/bin/java' extract id-as'jdk-11' atload'export JAVA_HOME=$(which java | cut -f -7 -d /)'
 zinit load adoptium/temurin11-binaries
 
 # Maven
@@ -198,6 +199,4 @@ alias gpers='git config user.email \"yann.rosema@hotmail.com\"; git config user.
 alias gcgk='git config user.email \"yann.rosema@cegeka.com\"; git config user.name \"Yann\ Rosema\"'
 
 # Git alias for the config/dotfile repo
-alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME
-
-'
+alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'

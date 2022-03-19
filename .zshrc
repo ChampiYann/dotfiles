@@ -150,8 +150,9 @@ pick'jdk-11*/bin/java' extract id-as'jdk-11' atload'export JAVA_HOME=$(which jav
 zinit load adoptium/temurin11-binaries
 
 # Maven
-zinit ice as'program' pick'apache-maven-3.6.3/bin/mvn' if'[[ ! $(command -v mvn) ]]' extract wait'[[ -n ${ZLAST_COMMANDS[(r)mvn*]} ]]'
-zinit snippet https://dlcdn.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+zinit ice as'program' pick'apache-maven-*/bin/mvn' if'[[ ! $(command -v mvn) ]]' extract
+# zinit snippet https://dlcdn.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+zinit snippet https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
 
 # GPG
 export GPG_TTY=$(tty)

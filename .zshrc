@@ -155,7 +155,8 @@ zinit ice as'program' pick'apache-maven-*/bin/mvn' if'[[ ! $(command -v mvn) ]]'
 zinit snippet https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
 
 # GPG
-export GPG_TTY=$(tty)
+#export GPG_TTY=$(tty)
+export GPG_TTY=$TTY
 
 # Load Oh-my-zsh plugins
 zinit snippet OMZP::git

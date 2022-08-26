@@ -22,4 +22,5 @@ echo "nameserver 8.8.8.8" | tee -a /etc/resolv.conf
 
 ## make the resolv file immutable
 # this is apparently the best solutions as mentioned in https://github.com/microsoft/WSL/issues/5420
+echo "Making the resolv file immutable..."
 chattr +i /etc/resolv.conf

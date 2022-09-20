@@ -63,13 +63,17 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-bin-gem-node
 
 # Load powerlevel10k
-zinit ice depth=1
+zinit ice depth=1 atload'source ~/.p10k.zsh' nocd
 zinit light romkatv/powerlevel10k
 
+# zinit ice wait'!' lucid atload'source ~/.p10k.zsh; _p9k_precmd' nocd
+# zinit light romkatv/powerlevel10k
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Load history search 
+zinit ice wait"1" lucid
 zinit load zdharma-continuum/history-search-multi-word
 
 ## Python
@@ -90,7 +94,7 @@ zinit ice if'[[ ! $(command -v python3.10) ]]' wait'[[ -n ${ZLAST_COMMANDS[(r)p3
 zinit snippet https://github.com/python/cpython/archive/refs/tags/v3.10.0.tar.gz
 
 # Install pip
-zinit ice if'[[ ! $(command -v pip3) && $(command -v python3) ]]' as'program' pick'$ZPFX/pip/bin/pip3' \
+zinit ice if'[[ ! $(command -v pip3) && $(command -v python3) ]]' as'program' pick'$ZPFX/pip/bin/pip3' wait lucid \
   atclone'python3 get-pip.py --prefix=$ZPFX/pip' atload'export PYTHONUSERBASE=$ZPFX/pip'  # You need this otherwise python doesn't know where to find it's packages
 zinit snippet https://bootstrap.pypa.io/get-pip.py
 
@@ -108,70 +112,97 @@ zinit ice if'[[ ! $(command -v az) && $(command -v pip3) && $(command -v python3
 zinit snippet https://github.com/Azure/azure-cli/blob/dev/az.completion
 
 ## Kubernetes
-# kubectl installation
-zinit ice as'program' pick'kubectl' if'[[ ! $(command -v kubectl) ]]'
-zinit snippet https://dl.k8s.io/release/v1.22.2/bin/linux/amd64/kubectl
+zinit ice as"program" from"gh-r" trigger-load"!k;!kubectl" atload'source <(kubectl completion zsh)'
+zinit load ChampiYann/kubectl-binaries
 # kubectl completion as aliases
-zinit ice if'[[ $(command -v kubectl) ]]'
+# zinit ice if'[[ $(command -v kubectl) ]]'
+zinit ice trigger-load"!k" atinit'mkdir $ZSH_CACHE_DIR/completions'
 zinit snippet OMZP::kubectl
 
 ## Helm
-zinit ice if'[[ ! $(command -v helm) ]]' as'program' pick'linux-amd64/helm' extract
-zinit snippet https://get.helm.sh/helm-v3.7.1-linux-amd64.tar.gz
+zinit ice as"program" from"gh-r" trigger-load"!helm"
+zinit load ChampiYann/helm-binaries
+
+## Openshift client (origin)
+zinit ice as'program' from'gh-r' bpick'*client*' pick'openshift*/oc' trigger-load'!oc'
+zinit load openshift/origin
 
 ## Go
 zinit ice as'program' pick'go/bin/go' if'[[ ! $(command -v go) ]]' id-as'go' extract
 zinit snippet https://golang.org/dl/go1.17.7.linux-amd64.tar.gz
 
+# jq for querying json output
+zinit ice as"program" from"gh-r" bpick"*linux64*" mv"jq-* -> jq"
+zinit light stedolan/jq
+
 # Load fzf
 if [[ $(command -v go) ]]; then # Needs go to succeed
-  zinit pack"binary" for fzf
-  source /home/yannr/.zinit/completions/_fzf_completion # source the completion file, because I don't know why...
+  # zinit pack"binary" for fzf
+  # source $HOME/.zinit/completions/_fzf_completion # source the completion file, because I don't know why...
+  # zinit pack"bgn+keys" for fzf
+  zinit ice from"gh-r" as"program" id-as"fzf-bin"
+  zinit light junegunn/fzf
+
+  zinit ice wait lucid multisrc'shell/{key-bindings,completion}.zsh'
+  zinit light junegunn/fzf
 else
   echo ""
   echo "Install go to use fzf."
   echo "Skipping fzf installation."
 fi
 
-# jq for querying json output
-zinit ice as"program" from"gh-r" bpick"*linux64*" mv"jq-* -> jq"
-zinit load stedolan/jq
-
 # fzf jq integration. Truly amazing! (use it with kubectl and azure)
+zinit ice wait lucid
 zinit load reegnz/jq-zsh-plugin
 # command: alt + j
 
 # Ctrl+W to add 'watch' to the command or to the last command if buffer is empty
+zinit ice wait lucid
 zinit load enrico9034/zsh-watch-plugin
 
 # java 11
-zinit ice as"program" if'[[ ! $(command -v java) ]]' from"gh-r" bpick"*jdk_x64_linux_hotspot*" \
-pick'jdk-11*/bin/java' extract id-as'jdk-11' atload'export JAVA_HOME=$(which java | cut -f -7 -d /)'
+# zinit ice as"program" if'[[ ! $(command -v java) ]]' from"gh-r" bpick"*jdk_x64_linux_hotspot*" \
+#   pick'jdk-11*/bin/jav' extract id-as'jdk-11' atload'export JAVA_HOME=$(which java | cut -f -7 -d /)' \
+#   trigger-load'!java'
+# zinit load adoptium/temurin11-binaries
+zinit ice as"program" if'[[ ! $(command -v java) ]]' from"gh-r" atload'export JAVA_HOME=$(which java | cut -f -7 -d /)' \
+  trigger-load'!java' bpick"*jdk_x64_linux_hotspot*" pick'jdk-11*/bin/*'
 zinit load adoptium/temurin11-binaries
 
 # Maven
-zinit ice as'program' pick'apache-maven-*/bin/mvn' if'[[ ! $(command -v mvn) ]]' extract
+zinit ice as'program' pick'apache-maven-*/bin/mvn' if'[[ ! $(command -v mvn) ]]' extract trigger-load'!mvn'
 # zinit snippet https://dlcdn.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-zinit snippet https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
+# zinit snippet https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
+zinit snippet https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
 
 # GPG
 #export GPG_TTY=$(tty)
 export GPG_TTY=$TTY
 
 # Load Oh-my-zsh plugins
-zinit snippet OMZP::git
-zinit snippet OMZP::colorize
-zinit snippet OMZP::pipenv
-zinit snippet OMZP::history
-zinit snippet OMZP::command-not-found
-zinit snippet OMZP::ssh-agent
+zinit wait lucid for \
+  OMZ::plugins/git/git.plugin.zsh \
+  OMZ::plugins/colorize/colorize.plugin.zsh \
+  OMZ::plugins/pipenv/pipenv.plugin.zsh \
+  OMZ::plugins/history/history.plugin.zsh \
+  OMZ::plugins/command-not-found/command-not-found.plugin.zsh \
+  OMZ::plugins/ssh-agent/ssh-agent.plugin.zsh
 
-# Load auto suggestions (based on history)
-zinit light zsh-users/zsh-autosuggestions
+# # Load auto suggestions (based on history)
+# zinit light zsh-users/zsh-autosuggestions
+# bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
+
+# # Load syntax highlighting
+# zinit light zdharma-continuum/fast-syntax-highlighting
+
+zinit wait lucid for \
+ atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+    zdharma-continuum/fast-syntax-highlighting \
+ blockf \
+    zsh-users/zsh-completions \
+ atload"!_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions
 bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
-
-# Load syntax highlighting
-zinit light zdharma-continuum/fast-syntax-highlighting
 
 # run compinit
 autoload -Uz compinit
@@ -179,8 +210,6 @@ compinit
 
 # replay compdef for catched completions
 zinit cdreplay -q
-
-source <(kubectl completion zsh)
 
 source <(helm completion zsh)
 

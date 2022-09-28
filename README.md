@@ -45,3 +45,7 @@ Add the following snippet to the JSON config of Windows Terminal app:
 Config can be added to the default profile of to the specific profile of the WSL terminal.
 
 ### Default shell
+Set you default shell to ZSH:
+```sh
+sudo usermod -s /usr/bin/zsh <username>
+```

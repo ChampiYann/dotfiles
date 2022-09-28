@@ -120,7 +120,7 @@ zinit ice trigger-load"!k" atinit'mkdir $ZSH_CACHE_DIR/completions'
 zinit snippet OMZP::kubectl
 
 ## Helm
-zinit ice as"program" from"gh-r" trigger-load"!helm"
+zinit ice as"program" from"gh-r" trigger-load"!helm" pick"*/helm"
 zinit load ChampiYann/helm-binaries
 
 ## Openshift client (origin)

@@ -44,6 +44,11 @@ Add the following snippet to the JSON config of Windows Terminal app:
 ```
 Config can be added to the default profile of to the specific profile of the WSL terminal.
 
+While you're at it, turn the bell off:
+```json
+"bellStyle": "none"
+```
+
 ### Default shell
 Set you default shell to ZSH:
 ```sh

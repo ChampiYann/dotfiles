@@ -54,3 +54,12 @@ Set you default shell to ZSH:
 ```sh
 sudo usermod -s /usr/bin/zsh <username>
 ```
+
+## Troubleshooting
+Files in `/etc/profile.d/` do not get sourced. You might have proxy settings there that are not sourced before zinit tries to connect to github.com thus failing the installation.
+
+To fix this you can add the following line to your `/etc/zsh/zprofile` file:
+```sh
+emulate sh -c 'source /etc/profile'
+```
+*source: https://bugs.launchpad.net/ubuntu/+source/zsh/+bug/1800280/comments/7*

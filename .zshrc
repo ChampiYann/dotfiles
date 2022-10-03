@@ -112,15 +112,12 @@ zinit ice if'[[ ! $(command -v az) && $(command -v pip3) && $(command -v python3
 zinit snippet https://github.com/Azure/azure-cli/blob/dev/az.completion
 
 ## Kubernetes
-zinit ice as"program" from"gh-r" trigger-load"!k;!kubectl" atload'source <(kubectl completion zsh)'
+zinit ice trigger-load"!k;!kubectl" as"program" from"gh-r" trigger-load"!k;!kubectl" atload'source <(kubectl completion zsh)'
 zinit load ChampiYann/kubectl-binaries
-# kubectl completion as aliases
-# zinit ice if'[[ $(command -v kubectl) ]]'
-zinit ice trigger-load"!k" atinit'mkdir $ZSH_CACHE_DIR/completions'
-zinit snippet OMZP::kubectl
+alias k=kubectl
 
 ## Helm
-zinit ice as"program" from"gh-r" trigger-load"!helm" pick"*/helm"
+zinit ice as"program" from"gh-r" trigger-load"!helm" pick"*/helm" atload"source <(helm completion zsh)"
 zinit load ChampiYann/helm-binaries
 
 ## Openshift client (origin)
@@ -180,6 +177,8 @@ zinit snippet https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven
 export GPG_TTY=$TTY
 
 # Load Oh-my-zsh plugins
+# Load auto suggestions (based on history)
+# Load syntax highlighting
 zinit wait lucid for \
   OMZ::plugins/git/git.plugin.zsh \
   OMZ::plugins/colorize/colorize.plugin.zsh \
@@ -187,13 +186,7 @@ zinit wait lucid for \
   OMZ::plugins/history/history.plugin.zsh \
   OMZ::plugins/command-not-found/command-not-found.plugin.zsh \
   OMZ::plugins/ssh-agent/ssh-agent.plugin.zsh
-
-# # Load auto suggestions (based on history)
-# zinit light zsh-users/zsh-autosuggestions
-# bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
-
-# # Load syntax highlighting
-# zinit light zdharma-continuum/fast-syntax-highlighting
+bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
 
 zinit wait lucid for \
  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
@@ -210,8 +203,6 @@ compinit
 
 # replay compdef for catched completions
 zinit cdreplay -q
-
-source <(helm completion zsh)
 
 # Add ls colors
 alias ls='ls --color=auto'

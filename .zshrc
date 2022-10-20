@@ -121,7 +121,7 @@ zinit ice as"program" from"gh-r" trigger-load"!helm" pick"*/helm" atload"source 
 zinit load ChampiYann/helm-binaries
 
 ## Openshift client (origin)
-zinit ice as'program' from'gh-r' bpick'*client*' pick'openshift*/oc' trigger-load'!oc' atload"source <(oc completion zsh)"
+zinit ice as'program' from'gh-r' bpick'*client*' pick'openshift*/oc' trigger-load'!oc' atload'source <(oc completion zsh)' atclone'rm openshift*/kubectl'
 zinit load openshift/origin
 
 ## Go

@@ -129,8 +129,8 @@ zinit ice as'program' pick'go/bin/go' if'[[ ! $(command -v go) ]]' id-as'go' ext
 zinit snippet https://golang.org/dl/go1.17.7.linux-amd64.tar.gz
 
 # jq for querying json output
-zinit ice as"program" from"gh-r" bpick"*linux64*" mv"jq-* -> jq"
-zinit light stedolan/jq
+zinit ice as"program" from"gh-r" mv"jq-* -> jq"
+zinit light jqlang/jq
 
 # Load fzf
 if [[ $(command -v go) ]]; then # Needs go to succeed

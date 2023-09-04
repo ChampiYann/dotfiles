@@ -197,6 +197,9 @@ zinit wait lucid for \
     zsh-users/zsh-autosuggestions
 bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
 
+# source podman completion
+source <(podman completion zsh)
+
 # run compinit
 autoload -Uz compinit
 compinit

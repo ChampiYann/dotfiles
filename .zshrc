@@ -99,8 +99,8 @@ zinit ice if'[[ ! $(command -v python3.10) ]]' wait'[[ -n ${ZLAST_COMMANDS[(r)p3
 zinit snippet https://github.com/python/cpython/archive/refs/tags/v3.10.0.tar.gz
 
 # Install pip
-zinit ice if'[[ ! $(command -v pip3) && $(command -v python3) ]]' as'program' pick'$ZPFX/pip/bin/pip3' wait lucid \
-  atclone'python3 get-pip.py --prefix=$ZPFX/pip' atload'export PYTHONUSERBASE=$ZPFX/pip'  # You need this otherwise python doesn't know where to find it's packages
+zinit ice if'[[ ! $(command -v pip3) && $(command -v python3) ]]' as'program' wait lucid \
+  atclone'python3 get-pip.py'  # You need this otherwise python doesn't know where to find it's packages
 zinit snippet https://bootstrap.pypa.io/get-pip.py
 
 # Load bash completion
@@ -111,7 +111,7 @@ bashcompinit
 ## Azure CLI
 # This basically a copy of the azure-cli install script in a completion snippet...
 zinit ice if'[[ ! $(command -v az) && $(command -v pip3) && $(command -v python3) ]]' \
-  id-as'az_completion' wait'[[ -n ${ZLAST_COMMANDS[(r)azure*]} ]]' \
+  id-as'az_completion' wait'[[ -n ${ZLAST_COMMANDS[(r)az*]} ]]' \
   as'program' atload'source az_completion' pick'$ZPFX/azure-cli/az' \
   atclone'pip3 install virtualenv; python3 -m virtualenv $ZPFX/azure-cli; source $ZPFX/azure-cli/bin/activate; pip3 install azure-cli --upgrade; deactivate; echo "#!/usr/bin/env bash" >> $ZPFX/azure-cli/az; echo "$ZPFX/azure-cli/bin/python -m azure.cli \"\$@\"" >>  $ZPFX/azure-cli/az'
 zinit snippet https://github.com/Azure/azure-cli/blob/dev/az.completion
@@ -134,8 +134,8 @@ zinit ice as'program' pick'go/bin/go' if'[[ ! $(command -v go) ]]' id-as'go' ext
 zinit snippet https://golang.org/dl/go1.17.7.linux-amd64.tar.gz
 
 # jq for querying json output
-zinit ice as"program" from"gh-r" bpick"*linux64*" mv"jq-* -> jq"
-zinit light stedolan/jq
+zinit ice as"program" from"gh-r" mv"jq-* -> jq"
+zinit light jqlang/jq
 
 # yq for querying json output
 zinit ice as"program" from"gh-r" mv"yq* -> yq"
@@ -205,6 +205,9 @@ zinit wait lucid for \
  atload"!_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions
 bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
+
+# source podman completion
+source <(podman completion zsh)
 
 # run compinit
 autoload -Uz compinit

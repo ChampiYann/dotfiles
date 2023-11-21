@@ -83,6 +83,11 @@ zinit ice if'[[ ! $(command -v python3) ]]' lucid as'program' make'install' pick
   atclone'tar --strip-components=1 -zxf v3.8.12.tar.gz; ./configure --prefix=$ZPFX/python3.8 --enable-optimizations'
 zinit snippet https://github.com/python/cpython/archive/refs/tags/v3.8.12.tar.gz
 
+# Python 3.6
+zinit ice if'[[ ! $(command -v python3.6) ]]' wait'[[ -n ${ZLAST_COMMANDS[(r)python3.6]} ]]' lucid as'program' make'install' \
+  pick'$ZPFX/python3.6/bin/*3.6' atclone'tar --strip-components=1 -zxf 3.6.tar.gz; ./configure --prefix=$ZPFX/python3.6 --enable-optimizations'
+zinit snippet https://github.com/python/cpython/archive/refs/tags/3.6.tar.gz
+
 # Python 3.9
 zinit ice if'[[ ! $(command -v python3.9) ]]' wait'[[ -n ${ZLAST_COMMANDS[(r)p3.9]} ]]' lucid as'program' make'install' \
   pick'$ZPFX/python3.9/bin/*3.9' atclone'tar --strip-components=1 -zxf v3.9.7.tar.gz; ./configure --prefix=$ZPFX/python3.9 --enable-optimizations'
@@ -132,12 +137,16 @@ zinit snippet https://golang.org/dl/go1.17.7.linux-amd64.tar.gz
 zinit ice as"program" from"gh-r" bpick"*linux64*" mv"jq-* -> jq"
 zinit light stedolan/jq
 
+# yq for querying json output
+zinit ice as"program" from"gh-r" mv"yq* -> yq"
+zinit light mikefarah/yq
+
 # Load fzf
 if [[ $(command -v go) ]]; then # Needs go to succeed
   # zinit pack"binary" for fzf
   # source $HOME/.zinit/completions/_fzf_completion # source the completion file, because I don't know why...
   # zinit pack"bgn+keys" for fzf
-  zinit ice from"gh-r" as"program" id-as"fzf-bin"
+  zinit ice from"gh-r" as"program" id-as"fzf-bin" wait lucid
   zinit light junegunn/fzf
 
   zinit ice wait lucid multisrc'shell/{key-bindings,completion}.zsh'

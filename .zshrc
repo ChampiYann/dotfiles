@@ -207,7 +207,9 @@ zinit wait lucid for \
 bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
 
 # source podman completion
-source <(podman completion zsh)
+if [[ $(command -v podman) ]]; then
+  source <(podman completion zsh)
+fi
 
 # run compinit
 autoload -Uz compinit

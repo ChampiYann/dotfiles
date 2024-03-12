@@ -12,7 +12,7 @@ export LS_COLORS='rs=0:no=00:mi=00:mh=00:ln=01;36:or=01;31:di=01;34:ow=04;01;34:
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
-setopt autocd nomatch notify 
+setopt autocd nomatch notify
 setopt globdots # Add dot files to completion
 setopt INC_APPEND_HISTORY # Write to history as soon as the command is entered
 unsetopt beep extendedglob
@@ -100,7 +100,7 @@ zinit snippet https://github.com/python/cpython/archive/refs/tags/v3.10.0.tar.gz
 
 # Install pip
 zinit ice if'[[ ! $(command -v pip3) && $(command -v python3) ]]' as'program' wait lucid \
-  atclone'python3 get-pip.py'  # You need this otherwise python doesn't know where to find it's packages
+  atclone'python3 get-pip.py --prefix=$ZPFX/pip' pick'$ZPFX/pip/bin/*' atload'export PYTHONUSERBASE=$ZPFX/pip' # You need this otherwise python doesn't know where to find it's packages
 zinit snippet https://bootstrap.pypa.io/get-pip.py
 
 # Load bash completion
@@ -117,12 +117,14 @@ zinit ice if'[[ ! $(command -v az) && $(command -v pip3) && $(command -v python3
 zinit snippet https://github.com/Azure/azure-cli/blob/dev/az.completion
 
 ## Kubernetes
-zinit ice trigger-load"!k;!kubectl" as"program" from"gh-r" trigger-load"!k;!kubectl" atload'source <(kubectl completion zsh)'
+# zinit ice trigger-load"!k;!kubectl" as"program" from"gh-r" atload'source <(kubectl completion zsh)'
+zinit ice wait"1" lucid as"program" from"gh-r" atload'source <(kubectl completion zsh)'
 zinit load ChampiYann/kubectl-binaries
 alias k=kubectl
 
 ## Helm
-zinit ice as"program" from"gh-r" trigger-load"!helm" pick"*/helm" atload"source <(helm completion zsh)"
+# zinit ice as"program" from"gh-r" trigger-load"!helm" pick"*/helm" atload"source <(helm completion zsh)"
+zinit ice wait"1" lucid as"program" from"gh-r" pick"*/helm" atload"source <(helm completion zsh)"
 zinit load ChampiYann/helm-binaries
 
 ## Openshift client (origin)
@@ -134,11 +136,11 @@ zinit ice as'program' pick'go/bin/go' if'[[ ! $(command -v go) ]]' id-as'go' ext
 zinit snippet https://golang.org/dl/go1.17.7.linux-amd64.tar.gz
 
 # jq for querying json output
-zinit ice as"program" from"gh-r" mv"jq-* -> jq"
+zinit ice wait"2" lucid as"program" from"gh-r" mv"jq-* -> jq"
 zinit light jqlang/jq
 
-# yq for querying json output
-zinit ice as"program" from"gh-r" mv"yq* -> yq"
+# yq for querying yaml output
+zinit ice wait"2" lucid as"program" from"gh-r" mv"yq* -> yq"
 zinit light mikefarah/yq
 
 # Load fzf
@@ -158,12 +160,12 @@ else
 fi
 
 # fzf jq integration. Truly amazing! (use it with kubectl and azure)
-zinit ice wait lucid
+zinit ice wait"2" lucid
 zinit load reegnz/jq-zsh-plugin
 # command: alt + j
 
 # Ctrl+W to add 'watch' to the command or to the last command if buffer is empty
-zinit ice wait lucid
+zinit ice wait"2" lucid
 zinit load enrico9034/zsh-watch-plugin
 
 # java 11
@@ -176,10 +178,18 @@ zinit ice as"program" if'[[ ! $(command -v java) ]]' from"gh-r" atload'export JA
 zinit load adoptium/temurin11-binaries
 
 # Maven
-zinit ice as'program' pick'apache-maven-*/bin/mvn' if'[[ ! $(command -v mvn) ]]' extract trigger-load'!mvn'
+zinit ice as'program' pick'apache-maven-*/bin/mvn' extract trigger-load'!mvn'
 # zinit snippet https://dlcdn.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
 # zinit snippet https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
 zinit snippet https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
+
+# pandoc
+zinit ice as'program' trigger-load'!pandoc' from'gh-r' pick'pandoc-*/bin/pandoc'
+zinit light jgm/pandoc
+
+# quarto
+zinit ice as'program' trigger-load'!quarto' from'gh-r' pick'quarto-*/bin/quarto'
+zinit light quarto-dev/quarto-cli
 
 # GPG
 #export GPG_TTY=$(tty)
@@ -191,11 +201,17 @@ export GPG_TTY=$TTY
 zinit wait lucid for \
   OMZ::plugins/git/git.plugin.zsh \
   OMZ::plugins/colorize/colorize.plugin.zsh \
-  OMZ::plugins/pipenv/pipenv.plugin.zsh \
+  has'pipenv' \
+    OMZ::plugins/pipenv/pipenv.plugin.zsh \
   OMZ::plugins/history/history.plugin.zsh \
   OMZ::plugins/command-not-found/command-not-found.plugin.zsh \
   OMZ::plugins/ssh-agent/ssh-agent.plugin.zsh
 bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
+
+# source podman completion
+if [[ $(command -v podman) ]]; then
+  source <(podman completion zsh)
+fi
 
 zinit wait lucid for \
  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
@@ -206,9 +222,9 @@ zinit wait lucid for \
     zsh-users/zsh-autosuggestions
 bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
 
-# source podman completion
-if [[ $(command -v podman) ]]; then
-  source <(podman completion zsh)
+# source local zshrc script
+if [[ -f "$HOME/.zshrc_local" ]]; then
+  source "$HOME/.zshrc_local"
 fi
 
 # run compinit

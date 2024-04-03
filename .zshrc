@@ -76,6 +76,11 @@ zinit light romkatv/powerlevel10k
 zinit ice wait"1" lucid
 zinit load zdharma-continuum/history-search-multi-word
 
+## pkgx
+zinit ice from"gh-r" as"program" wait lucid extract\
+  bpick"*linux+x86-64*" atload"source <(pkgx --shellcode)"
+zinit load pkgxdev/pkgx
+
 ## Python
 # Assuming there will always be a version of python available
 # Install pip
@@ -92,11 +97,11 @@ bashcompinit
 
 ## Azure CLI
 # This basically a copy of the azure-cli install script in a completion snippet...
-zinit ice if'[[ ! $(command -v az) && $(command -v pip3) && $(command -v python3) ]]' \
-  id-as'az_completion' wait'[[ -n ${ZLAST_COMMANDS[(r)az*]} ]]' \
-  as'program' atload'source az_completion' pick'$ZPFX/azure-cli/az' \
-  atclone'pip3 install virtualenv; python3 -m virtualenv $ZPFX/azure-cli; source $ZPFX/azure-cli/bin/activate; pip3 install azure-cli --upgrade; deactivate; echo "#!/usr/bin/env bash" >> $ZPFX/azure-cli/az; echo "$ZPFX/azure-cli/bin/python -m azure.cli \"\$@\"" >>  $ZPFX/azure-cli/az'
-zinit snippet https://github.com/Azure/azure-cli/blob/dev/az.completion
+# zinit ice if'[[ ! $(command -v az) && $(command -v pip3) && $(command -v python3) ]]' \
+#   id-as'az_completion' wait'[[ -n ${ZLAST_COMMANDS[(r)az*]} ]]' \
+#   as'program' atload'source az_completion' pick'$ZPFX/azure-cli/az' \
+#   atclone'pip3 install virtualenv; python3 -m virtualenv $ZPFX/azure-cli; source $ZPFX/azure-cli/bin/activate; pip3 install azure-cli --upgrade; deactivate; echo "#!/usr/bin/env bash" >> $ZPFX/azure-cli/az; echo "$ZPFX/azure-cli/bin/python -m azure.cli \"\$@\"" >>  $ZPFX/azure-cli/az'
+# zinit snippet https://github.com/Azure/azure-cli/blob/dev/az.completion
 
 ## Kubernetes
 # zinit ice trigger-load"!k;!kubectl" as"program" from"gh-r" atload'source <(kubectl completion zsh)'
@@ -113,10 +118,6 @@ zinit load ChampiYann/helm-binaries
 zinit ice as'program' from'gh-r' bpick'*client*' pick'openshift*/oc' trigger-load'!oc' atload'source <(oc completion zsh)' atclone'rm openshift*/kubectl'
 zinit load openshift/origin
 
-## Go
-zinit ice as'program' pick'go/bin/go' if'[[ ! $(command -v go) ]]' id-as'go' extract
-zinit snippet https://golang.org/dl/go1.17.7.linux-amd64.tar.gz
-
 # jq for querying json output
 zinit ice wait"2" lucid as"program" from"gh-r" mv"jq-* -> jq"
 zinit light jqlang/jq
@@ -126,20 +127,11 @@ zinit ice wait"2" lucid as"program" from"gh-r" mv"yq* -> yq"
 zinit light mikefarah/yq
 
 # Load fzf
-if [[ $(command -v go) ]]; then # Needs go to succeed
-  # zinit pack"binary" for fzf
-  # source $HOME/.zinit/completions/_fzf_completion # source the completion file, because I don't know why...
-  # zinit pack"bgn+keys" for fzf
-  zinit ice from"gh-r" as"program" id-as"fzf-bin" wait lucid
-  zinit light junegunn/fzf
+zinit ice from"gh-r" as"program" id-as"fzf-bin" wait lucid
+zinit light junegunn/fzf
 
-  zinit ice wait lucid multisrc'shell/{key-bindings,completion}.zsh'
-  zinit light junegunn/fzf
-else
-  echo ""
-  echo "Install go to use fzf."
-  echo "Skipping fzf installation."
-fi
+zinit ice wait lucid multisrc'shell/{key-bindings,completion}.zsh'
+zinit light junegunn/fzf
 
 # fzf jq integration. Truly amazing! (use it with kubectl and azure)
 zinit ice wait"2" lucid
@@ -149,21 +141,6 @@ zinit load reegnz/jq-zsh-plugin
 # Ctrl+W to add 'watch' to the command or to the last command if buffer is empty
 zinit ice wait"2" lucid
 zinit load enrico9034/zsh-watch-plugin
-
-# java 11
-# zinit ice as"program" if'[[ ! $(command -v java) ]]' from"gh-r" bpick"*jdk_x64_linux_hotspot*" \
-#   pick'jdk-11*/bin/jav' extract id-as'jdk-11' atload'export JAVA_HOME=$(which java | cut -f -7 -d /)' \
-#   trigger-load'!java'
-# zinit load adoptium/temurin11-binaries
-zinit ice as"program" if'[[ ! $(command -v java) ]]' from"gh-r" atload'export JAVA_HOME=$(which java | cut -f -7 -d /)' \
-  trigger-load'!java' bpick"*jdk_x64_linux_hotspot*" pick'jdk-11*/bin/*'
-zinit load adoptium/temurin11-binaries
-
-# Maven
-zinit ice as'program' pick'apache-maven-*/bin/mvn' extract trigger-load'!mvn'
-# zinit snippet https://dlcdn.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-# zinit snippet https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
-zinit snippet https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
 
 # pandoc
 zinit ice as'program' trigger-load'!pandoc' from'gh-r' pick'pandoc-*/bin/pandoc'
@@ -186,14 +163,8 @@ zinit wait lucid for \
   has'pipenv' \
     OMZ::plugins/pipenv/pipenv.plugin.zsh \
   OMZ::plugins/history/history.plugin.zsh \
-  OMZ::plugins/command-not-found/command-not-found.plugin.zsh \
   OMZ::plugins/ssh-agent/ssh-agent.plugin.zsh
 bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
-
-# source podman completion
-if [[ $(command -v podman) ]]; then
-  source <(podman completion zsh)
-fi
 
 zinit wait lucid for \
  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \

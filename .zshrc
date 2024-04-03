@@ -77,31 +77,13 @@ zinit ice wait"1" lucid
 zinit load zdharma-continuum/history-search-multi-word
 
 ## Python
-# Python 3.8
-# If there is no version of python3 available, install python 3.8
-zinit ice if'[[ ! $(command -v python3) ]]' lucid as'program' make'install' pick'$ZPFX/python3.8/bin/*' \
-  atclone'tar --strip-components=1 -zxf v3.8.12.tar.gz; ./configure --prefix=$ZPFX/python3.8 --enable-optimizations'
-zinit snippet https://github.com/python/cpython/archive/refs/tags/v3.8.12.tar.gz
-
-# Python 3.6
-zinit ice if'[[ ! $(command -v python3.6) ]]' wait'[[ -n ${ZLAST_COMMANDS[(r)python3.6]} ]]' lucid as'program' make'install' \
-  pick'$ZPFX/python3.6/bin/*3.6' atclone'tar --strip-components=1 -zxf 3.6.tar.gz; ./configure --prefix=$ZPFX/python3.6 --enable-optimizations'
-zinit snippet https://github.com/python/cpython/archive/refs/tags/3.6.tar.gz
-
-# Python 3.9
-zinit ice if'[[ ! $(command -v python3.9) ]]' wait'[[ -n ${ZLAST_COMMANDS[(r)p3.9]} ]]' lucid as'program' make'install' \
-  pick'$ZPFX/python3.9/bin/*3.9' atclone'tar --strip-components=1 -zxf v3.9.7.tar.gz; ./configure --prefix=$ZPFX/python3.9 --enable-optimizations'
-zinit snippet https://github.com/python/cpython/archive/refs/tags/v3.9.7.tar.gz
-
-# Python 3.10
-zinit ice if'[[ ! $(command -v python3.10) ]]' wait'[[ -n ${ZLAST_COMMANDS[(r)p3.10]} ]]' lucid as'program' make'install' \
-  pick'$ZPFX/python3.10/bin/*3.10' atclone'tar --strip-components=1 -zxf v3.10.0.tar.gz; ./configure --prefix=$ZPFX/python3.10 --enable-optimizations'
-zinit snippet https://github.com/python/cpython/archive/refs/tags/v3.10.0.tar.gz
-
+# Assuming there will always be a version of python available
 # Install pip
-zinit ice if'[[ ! $(command -v pip3) && $(command -v python3) ]]' as'program' wait lucid \
-  atclone'python3 get-pip.py --prefix=$ZPFX/pip' pick'$ZPFX/pip/bin/*' atload'export PYTHONUSERBASE=$ZPFX/pip' # You need this otherwise python doesn't know where to find it's packages
+zinit ice has'python3' as'program' wait lucid \
+  atload'export PYTHONUSERBASE=$ZPFX/local && export PYTHONPATH=$ZPFX/local/lib/$(readlink -n $(which python3))/dist-packages' \
+  atclone'python3 get-pip.py --prefix=$ZPFX'
 zinit snippet https://bootstrap.pypa.io/get-pip.py
+export PATH=$PATH:$ZPFX/local/bin
 
 # Load bash completion
 # Azure CLI completion exist only for bash as of now. Please fix it, it's ugly :(

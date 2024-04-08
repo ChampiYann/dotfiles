@@ -66,25 +66,22 @@ zinit light-mode for \
 zinit ice depth=1 atload'source ~/.p10k.zsh' nocd
 zinit light romkatv/powerlevel10k
 
-# zinit ice wait'!' lucid atload'source ~/.p10k.zsh; _p9k_precmd' nocd
-# zinit light romkatv/powerlevel10k
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Load history search 
-zinit ice wait"1" lucid
+zinit ice wait lucid
 zinit load zdharma-continuum/history-search-multi-word
 
 ## pkgx
-zinit ice from"gh-r" as"program" wait lucid extract\
-  bpick"*linux+x86-64*" atload"source <(pkgx --shellcode)"
+zinit ice wait lucid extract from'gh-r' as'program' \
+  bpick'*linux+x86-64*' atload'source <(pkgx --shellcode)'
 zinit load pkgxdev/pkgx
 
 ## Python
 # Assuming there will always be a version of python available
 # Install pip
-zinit ice has'python3' as'program' wait lucid \
+zinit ice wait lucid has'python3' as'program' \
   atload'export PYTHONUSERBASE=$ZPFX/local && export PYTHONPATH=$ZPFX/local/lib/$(readlink -n $(which python3))/dist-packages' \
   atclone'python3 get-pip.py --prefix=$ZPFX'
 zinit snippet https://bootstrap.pypa.io/get-pip.py
@@ -95,31 +92,22 @@ export PATH=$PATH:$ZPFX/local/bin
 autoload -Uz bashcompinit
 bashcompinit
 
-## Azure CLI
-# This basically a copy of the azure-cli install script in a completion snippet...
-# zinit ice if'[[ ! $(command -v az) && $(command -v pip3) && $(command -v python3) ]]' \
-#   id-as'az_completion' wait'[[ -n ${ZLAST_COMMANDS[(r)az*]} ]]' \
-#   as'program' atload'source az_completion' pick'$ZPFX/azure-cli/az' \
-#   atclone'pip3 install virtualenv; python3 -m virtualenv $ZPFX/azure-cli; source $ZPFX/azure-cli/bin/activate; pip3 install azure-cli --upgrade; deactivate; echo "#!/usr/bin/env bash" >> $ZPFX/azure-cli/az; echo "$ZPFX/azure-cli/bin/python -m azure.cli \"\$@\"" >>  $ZPFX/azure-cli/az'
-# zinit snippet https://github.com/Azure/azure-cli/blob/dev/az.completion
-
 ## Kubernetes
-# zinit ice trigger-load"!k;!kubectl" as"program" from"gh-r" atload'source <(kubectl completion zsh)'
-zinit ice wait"1" lucid as"program" from"gh-r" atload'source <(kubectl completion zsh)'
+zinit ice wait'1' lucid as'program' from'gh-r' atload'source <(kubectl completion zsh)'
 zinit load ChampiYann/kubectl-binaries
 alias k=kubectl
 
 ## Helm
-# zinit ice as"program" from"gh-r" trigger-load"!helm" pick"*/helm" atload"source <(helm completion zsh)"
-zinit ice wait"1" lucid as"program" from"gh-r" pick"*/helm" atload"source <(helm completion zsh)"
+zinit ice wait'1' lucid as'program' from'gh-r' pick'*/helm' atload'source <(helm completion zsh)'
 zinit load ChampiYann/helm-binaries
 
 ## Openshift client (origin)
-zinit ice as'program' from'gh-r' bpick'*client*' pick'openshift*/oc' trigger-load'!oc' atload'source <(oc completion zsh)' atclone'rm openshift*/kubectl'
+zinit ice wait'1' lucid as'program' from'gh-r' bpick'*client*' pick'openshift*/oc' trigger-load'!oc' \
+  atload'source <(oc completion zsh)' atclone'rm openshift*/kubectl'
 zinit load openshift/origin
 
 # jq for querying json output
-zinit ice wait"2" lucid as"program" from"gh-r" mv"jq-* -> jq"
+zinit ice wait'2' lucid as'program' from'gh-r' mv'jq-* -> jq'
 zinit light jqlang/jq
 
 # yq for querying yaml output
@@ -127,10 +115,7 @@ zinit ice wait"2" lucid as"program" from"gh-r" mv"yq* -> yq"
 zinit light mikefarah/yq
 
 # Load fzf
-zinit ice from"gh-r" as"program" id-as"fzf-bin" wait lucid
-zinit light junegunn/fzf
-
-zinit ice wait lucid multisrc'shell/{key-bindings,completion}.zsh'
+zinit ice wait lucid from"gh-r" as"program" atload"source <(fzf --zsh)"
 zinit light junegunn/fzf
 
 # fzf jq integration. Truly amazing! (use it with kubectl and azure)
@@ -143,11 +128,11 @@ zinit ice wait"2" lucid
 zinit load enrico9034/zsh-watch-plugin
 
 # pandoc
-zinit ice as'program' trigger-load'!pandoc' from'gh-r' pick'pandoc-*/bin/pandoc'
+zinit ice wait lucid as'program' trigger-load'!pandoc' from'gh-r' pick'pandoc-*/bin/pandoc'
 zinit light jgm/pandoc
 
 # quarto
-zinit ice as'program' trigger-load'!quarto' from'gh-r' pick'quarto-*/bin/quarto'
+zinit ice wait lucid as'program' trigger-load'!quarto' from'gh-r' pick'quarto-*/bin/quarto'
 zinit light quarto-dev/quarto-cli
 
 # GPG

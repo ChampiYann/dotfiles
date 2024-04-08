@@ -111,20 +111,20 @@ zinit ice wait'2' lucid as'program' from'gh-r' mv'jq-* -> jq'
 zinit light jqlang/jq
 
 # yq for querying yaml output
-zinit ice wait"2" lucid as"program" from"gh-r" mv"yq* -> yq"
+zinit ice wait'2' lucid as'program' from'gh-r' mv'yq* -> yq'
 zinit light mikefarah/yq
 
 # Load fzf
-zinit ice wait lucid from"gh-r" as"program" atload"source <(fzf --zsh)"
+zinit ice wait lucid from'gh-r' as'program' atload'source <(fzf --zsh)'
 zinit light junegunn/fzf
 
 # fzf jq integration. Truly amazing! (use it with kubectl and azure)
-zinit ice wait"2" lucid
+zinit ice wait'2' lucid
 zinit load reegnz/jq-zsh-plugin
 # command: alt + j
 
 # Ctrl+W to add 'watch' to the command or to the last command if buffer is empty
-zinit ice wait"2" lucid
+zinit ice wait'2' lucid
 zinit load enrico9034/zsh-watch-plugin
 
 # pandoc
@@ -152,11 +152,11 @@ zinit wait lucid for \
 bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
 
 zinit wait lucid for \
- atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+ atinit'ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay' \
     zdharma-continuum/fast-syntax-highlighting \
  blockf \
     zsh-users/zsh-completions \
- atload"!_zsh_autosuggest_start" \
+ atload'!_zsh_autosuggest_start' \
     zsh-users/zsh-autosuggestions
 bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
 

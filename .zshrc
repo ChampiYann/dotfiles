@@ -70,11 +70,11 @@ zinit light romkatv/powerlevel10k
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Load history search 
-zinit ice wait lucid
-zinit load zdharma-continuum/history-search-multi-word
+# zinit ice wait lucid
+# zinit load zdharma-continuum/history-search-multi-word
 
 ## pkgx
-zinit ice wait lucid extract from'gh-r' as'program' \
+zinit ice wait lucid extract from'gh-r' as'program' trigger-load'!pkgx;!env' \
   bpick'*linux+x86-64*' atload'source <(pkgx --shellcode)'
 zinit load pkgxdev/pkgx
 
@@ -92,26 +92,33 @@ export PATH=$PATH:$ZPFX/local/bin
 autoload -Uz bashcompinit
 bashcompinit
 
-## Kubernetes
-zinit ice wait'1' lucid as'program' from'gh-r' atload'source <(kubectl completion zsh)'
-zinit load ChampiYann/kubectl-binaries
+## Kubernetes & helm
 alias k=kubectl
+zinit lucid as'program' from'gh-r' for \
+  trigger-load'!kubectl' atload'source <(kubectl completion zsh)'\
+    ChampiYann/kubectl-binaries \
+  trigger-load'!helm' atload'source <(helm completion zsh)' pick'*/helm' \
+    ChampiYann/helm-binaries
 
-## Helm
-zinit ice wait'1' lucid as'program' from'gh-r' pick'*/helm' atload'source <(helm completion zsh)'
-zinit load ChampiYann/helm-binaries
+## Load kubectl and helm where starting VScode
+code () {
+  unset -f code
+  eval kubectl > /dev/null
+  eval helm > /dev/null
+  eval code $@
+}
 
 ## Openshift client (origin)
-zinit ice wait'1' lucid as'program' from'gh-r' bpick'*client*' pick'openshift*/oc' trigger-load'!oc' \
+zinit ice lucid as'program' from'gh-r' bpick'*client*' pick'openshift*/oc' trigger-load'!oc' \
   atload'source <(oc completion zsh)' atclone'rm openshift*/kubectl'
 zinit load openshift/origin
 
 # jq for querying json output
-zinit ice wait'2' lucid as'program' from'gh-r' mv'jq-* -> jq'
+zinit ice lucid as'program' from'gh-r' mv'jq-* -> jq' trigger-load'!jq'
 zinit light jqlang/jq
 
 # yq for querying yaml output
-zinit ice wait'2' lucid as'program' from'gh-r' mv'yq* -> yq'
+zinit ice lucid as'program' from'gh-r' mv'yq* -> yq' trigger-load'!yq'
 zinit light mikefarah/yq
 
 # Load fzf
@@ -119,12 +126,12 @@ zinit ice wait lucid from'gh-r' as'program' atload'source <(fzf --zsh)'
 zinit light junegunn/fzf
 
 # fzf jq integration. Truly amazing! (use it with kubectl and azure)
-zinit ice wait'2' lucid
+zinit ice wait lucid
 zinit load reegnz/jq-zsh-plugin
 # command: alt + j
 
 # Ctrl+W to add 'watch' to the command or to the last command if buffer is empty
-zinit ice wait'2' lucid
+zinit ice wait lucid
 zinit load enrico9034/zsh-watch-plugin
 
 # pandoc
@@ -147,9 +154,8 @@ zinit wait lucid for \
   OMZ::plugins/colorize/colorize.plugin.zsh \
   has'pipenv' \
     OMZ::plugins/pipenv/pipenv.plugin.zsh \
-  OMZ::plugins/history/history.plugin.zsh \
-  OMZ::plugins/ssh-agent/ssh-agent.plugin.zsh
-bindkey "^[[1;5C" forward-word # Ctrl+right arrow completes a word
+  silent\
+    OMZ::plugins/ssh-agent/ssh-agent.plugin.zsh
 
 zinit wait lucid for \
  atinit'ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay' \

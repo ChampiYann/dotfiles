@@ -155,7 +155,9 @@ zinit wait lucid for \
   has'pipenv' \
     OMZ::plugins/pipenv/pipenv.plugin.zsh \
   silent\
-    OMZ::plugins/ssh-agent/ssh-agent.plugin.zsh
+    OMZ::plugins/ssh-agent/ssh-agent.plugin.zsh \
+  has'docker' trigger-load'!docker' \
+    OMZ::plugins/docker/docker.plugin.zsh
 
 zinit wait lucid for \
  atinit'ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay' \

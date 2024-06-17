@@ -108,10 +108,10 @@ code () {
   eval code $@
 }
 
-## Openshift client (origin)
-zinit ice lucid as'program' from'gh-r' bpick'*client*' pick'openshift*/oc' trigger-load'!oc' \
-  atload'source <(oc completion zsh)' atclone'rm openshift*/kubectl'
-zinit load openshift/origin
+# ## Openshift client (origin)
+# zinit ice lucid as'program' from'gh-r' bpick'*client*' pick'openshift*/oc' trigger-load'!oc' \
+#   atload'source <(oc completion zsh)' atclone'rm openshift*/kubectl'
+# zinit load openshift/origin
 
 # jq for querying json output
 zinit ice lucid as'program' from'gh-r' mv'jq-* -> jq' trigger-load'!jq'
@@ -157,7 +157,9 @@ zinit wait lucid for \
   silent\
     OMZ::plugins/ssh-agent/ssh-agent.plugin.zsh \
   has'docker' trigger-load'!docker' \
-    OMZ::plugins/docker/docker.plugin.zsh
+    OMZ::plugins/docker/docker.plugin.zsh \
+  has'oc' trigger-load'!oc' \
+    OMZ::plugins/oc/oc.plugin.zsh
 
 zinit wait lucid for \
  atinit'ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay' \
